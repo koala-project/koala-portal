@@ -1,0 +1,23 @@
+server:
+  port: 8090
+
+mybatis:
+  driverClassName: com.mysql.jdbc.Driver
+  url: jdbc:mysql://qdm107936212.my3w.com:3306/qdm107936212_db?characterEncoding=UTF-8
+  username: qdm107936212
+  password: lhyyfn623
+  maxActive: 8
+
+  typeAliasesPackage: com.koala.base.entities
+  mapperLocations: classpath:com/koala/base/repositories/*.xml
+  basePackage: com.koala.base.repositories
+
+dubbo:
+  zookeeper: zookeeper://127.0.0.1:2181
+  port: 20880
+
+
+jdbc:
+  url: jdbc:mysql://qdm107936212.my3w.com:3306/qdm107936212_db?characterEncoding=UTF-8
+  user: qdm107936212
+  password: lhyyfn623
