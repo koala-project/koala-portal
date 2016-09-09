@@ -37,4 +37,10 @@ public class TestController {
         return new JsonResult(ResultCode.SUCCESS,"访问成功", userInfo.getUserName());
     }
 
+    @RequestMapping(value = "/get")
+    public JsonResult getUser(){
+        UserInfo ui = memberService.getUserById(33L);
+        return new JsonResult(ResultCode.SUCCESS,"",ui.getCreateDate());
+    }
+
 }
