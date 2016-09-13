@@ -4,10 +4,12 @@ import com.koala.member.api.MemberService;
 import com.koala.member.api.response.UserInfo;
 import com.koala.utils.common.define.JsonResult;
 import com.koala.utils.common.define.ResultCode;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.websocket.server.PathParam;
 import java.util.Date;
 
 /**
@@ -37,9 +39,9 @@ public class TestController {
         return new JsonResult(ResultCode.SUCCESS,"访问成功", userInfo.getUserName());
     }
 
-    @RequestMapping(value = "/get")
-    public JsonResult getUser(){
-        UserInfo ui = memberService.getUserById(33L);
+    @RequestMapping(value = "/get/{id}")
+    public JsonResult getUser(@PathVariable Long id){
+        UserInfo ui = memberService.getUserById(id);
         return new JsonResult(ResultCode.SUCCESS,"",ui.getCreateDate());
     }
 
