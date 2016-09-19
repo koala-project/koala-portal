@@ -459,7 +459,7 @@ public class MultiServlet extends BaseServlet {
         // 拼装被签名参数列表
         StringBuilder sb = getSortedParameters(request);
 
-        String ua = request.getHeader("User-Agent");
+        String ua = request.getHeader("User-Agent").concat("/koala.tester");
         if(StringUtils.isNotEmpty(ua) && ua.contains(DEBUG_AGENT)){
             return true;
         }
