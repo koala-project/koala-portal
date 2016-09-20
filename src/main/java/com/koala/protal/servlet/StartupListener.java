@@ -124,9 +124,9 @@ public class StartupListener implements ServletContextListener {
                                         reference.setTimeout(CommonConfig.getInstance().getTimeout());
                                         reference.setInterface(clazz);
                                         reference.setCheck(false);
-                                        if (ApiConfig.getInstance().getServiceVersion() != null && !ApiConfig.getInstance().getServiceVersion().isEmpty()) {
+                                        /*if (ApiConfig.getInstance().getServiceVersion() != null && !ApiConfig.getInstance().getServiceVersion().isEmpty()) {
                                             reference.setVersion(ApiConfig.getInstance().getServiceVersion());
-                                        }
+                                        }*/
                                             /*
                                             }
                                             */
