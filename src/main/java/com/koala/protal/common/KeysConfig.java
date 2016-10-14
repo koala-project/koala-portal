@@ -9,7 +9,7 @@ import java.util.Properties;
 
 public class KeysConfig extends HashMap<Long,String> {
 
-    private static final Logger logger                 = LoggerFactory.getLogger(KeysConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(KeysConfig.class);
     private static KeysConfig instance;
 
     private KeysConfig() {

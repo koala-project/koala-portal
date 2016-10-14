@@ -180,8 +180,9 @@ public class MultiServlet extends BaseServlet {
             }
 
             //Integrate None Internal级别接口不具备用户身份
-            if (!SecurityType.isNone(context.requiredSecurity) && !SecurityType.Integrated.check(
-                    context.requiredSecurity) && !SecurityType.Internal.check(context.requiredSecurity)) {
+            if (!SecurityType.isNone(context.requiredSecurity)
+                    && !SecurityType.Integrated.check(context.requiredSecurity)
+                    && !SecurityType.Internal.check(context.requiredSecurity)) {
                 context.requiredSecurity = SecurityType.RegisteredDevice.authorize(context.requiredSecurity);
                 if (context.caller == null) {
                     return ApiReturnCode.TOKEN_ERROR;
@@ -459,6 +460,7 @@ public class MultiServlet extends BaseServlet {
         // 拼装被签名参数列表
         StringBuilder sb = getSortedParameters(request);
 
+        //TODO 暂时添加koala.tester
         String ua = request.getHeader("User-Agent").concat("/koala.tester");
         if(StringUtils.isNotEmpty(ua) && ua.contains(DEBUG_AGENT)){
             return true;
@@ -514,61 +516,6 @@ public class MultiServlet extends BaseServlet {
 
     @Override
     protected Object processCall(String name, String[] params) {
-        /*
-        if (CompileConfig.isDebug) {
-            String targetDubboVersion = null;
-            String targetDubboURL = null;
-
-            // params 非空的情况下后两个参数是调试版本和调试地址信息
-            if (params != null && params.length >= 2) {
-                targetDubboVersion = params[params.length - 2];
-                targetDubboURL = params[params.length - 1];
-                String[] tmp = new String[params.length - 2];
-                for (int i = 0; i < tmp.length; i++) {
-                    tmp[i] = params[i];
-                }
-                params = tmp;
-            }
-
-            // 下面这段代码的性能不高,仅用作开发调试
-            if (targetDubboVersion != null && !targetDubboVersion.isEmpty() && (targetDubboURL == null || targetDubboURL.isEmpty())) {
-                ApplicationConfig application = new ApplicationConfig();
-                application.setName("api");
-                // 连接注册中心配置
-                String[] addressArray = ApiConfig.getInstance().getZkAddress().split(" ");
-                List<RegistryConfig> registryConfigList = new LinkedList<RegistryConfig>();
-                for (String zkAddress : addressArray) {
-                    RegistryConfig registry = new RegistryConfig();
-                    registry.setAddress(zkAddress);
-                    registry.setProtocol("dubbo");
-                    registryConfigList.add(registry);
-                }
-                ReferenceConfig reference = new ReferenceConfig(); // 此实例很重，封装了与注册中心的连接以及与提供者的连接，请自行缓存，否则可能造成内存和连接泄漏
-                reference.setApplication(application);
-                reference.setRegistries(registryConfigList);// 多个注册中心可以用setRegistries()
-                reference.setInterface(apiManager.getApiMethodInfo(name).dubboInterface);
-                reference.setRetries(0);
-                reference.setVersion(targetDubboVersion);
-                Object service = reference.get(); // 注意：此代理对象内部封装了所有通讯细节，对象较重，请缓存复用
-                HttpApiExecuter executer = HttpApiProvider.getApiExecuter(name, apiManager.getApiMethodInfo(name));
-                executer.setInstance(service);// 重设服务实例
-                return executer.execute(params);
-            } else if (targetDubboURL != null && !targetDubboURL.isEmpty()) {
-                ApplicationConfig application = new ApplicationConfig();
-                application.setName("api");
-                ReferenceConfig reference = new ReferenceConfig(); // 此实例很重，封装了与注册中心的连接以及与提供者的连接，请自行缓存，否则可能造成内存和连接泄漏
-                reference.setApplication(application);
-                reference.setInterface(apiManager.getApiMethodInfo(name).dubboInterface);
-                reference.setRetries(0);
-                reference.setUrl(targetDubboURL);
-                reference.setVersion(targetDubboVersion);
-                Object service = reference.get(); // 注意：此代理对象内部封装了所有通讯细节，对象较重，请缓存复用
-                HttpApiExecuter executer = HttpApiProvider.getApiExecuter(name, apiManager.getApiMethodInfo(name));
-                executer.setInstance(service);// 重设服务实例
-                return executer.execute(params);
-            }
-        }
-        */
         return apiManager.processRequest(name, params);
     }
 
