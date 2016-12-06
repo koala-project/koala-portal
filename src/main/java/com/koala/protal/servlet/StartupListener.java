@@ -18,6 +18,9 @@ import javax.servlet.annotation.WebListener;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -70,7 +73,7 @@ public class StartupListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         try {
         //Tomcat的WebappClassLoader加载指定目录的jar文件
-        WebappClassLoader loader = (WebappClassLoader)getClass().getClassLoader();
+        URLClassLoader loader = (URLClassLoader) getClass().getClassLoader();
         //被托管的api jar包目录
         File apiJarDirectory = new File(ApiConfig.getInstance().getApiJarPath());
         //dubbo 的 applicationConfig 应用信息配置(name:当前应用名称，用于注册中心计算应用间依赖关系)
@@ -87,7 +90,12 @@ public class StartupListener implements ServletContextListener {
             registryConfigList.add(registry);
         }
 
-        //业务服务
+        Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+        boolean accessible = method.isAccessible();
+        if (!accessible){
+            method.setAccessible(true);
+        }
+            //业务服务
         if (apiJarDirectory.exists() && apiJarDirectory.isDirectory()) {
 
             File[] files = apiJarDirectory.listFiles(new FilenameFilter() {  //抓到目录中的jar包
@@ -107,7 +115,8 @@ public class StartupListener implements ServletContextListener {
                             //对外的接口 eg:ren.yoki.user.api.LoginServiceHttpExport  ren.yoki.user.api.UserService
                             String[] names = ns.split(" ");
                             //tomcat 加载一个jar包
-                            loader.addRepository(f.toURI().toURL().toString());
+//                            loader.addRepository(f.toURI().toURL().toString());
+                            method.invoke(loader, f.toURI().toURL());
                             for (String name : names) {
                                 if (name != null) {
                                     name = name.trim();
@@ -149,6 +158,7 @@ public class StartupListener implements ServletContextListener {
                         if (jf != null) {
                             jf.close();
                         }
+                        method.setAccessible(accessible);
                     }
                 }
             }
